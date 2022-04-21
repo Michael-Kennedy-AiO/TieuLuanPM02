@@ -5,6 +5,7 @@ public class HangHoa {
 	private String name;
 	private int itemCount;
 	private String nameNhaSX;
+	protected boolean status;
 	
 	protected HangHoa(long _id, String _name, int _itemCount, String _nameNhaSX) {
 		id = _id;

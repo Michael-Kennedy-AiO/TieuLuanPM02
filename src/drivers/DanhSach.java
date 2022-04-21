@@ -35,7 +35,7 @@ public class DanhSach {
 				j = -1;
 			}
 		}
-		listSS.add(new SanhSu(id, name, itemCount, Date.valueOf(timeSanXuat), nameNhaSX));
+		listSS.add(new SanhSu(id, name, itemCount, timeSanXuat, nameNhaSX));
 	}
 		
 	

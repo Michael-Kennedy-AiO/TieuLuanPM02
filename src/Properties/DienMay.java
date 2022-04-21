@@ -13,6 +13,7 @@ public class DienMay extends HangHoa{
 		super(_id, _name, _itemCount, _nameNhaSX);
 		timeBaoHanh = CalTimeBaoHanh(_timeBaoHanh);
 		congXuat = _congXuat;
+		status = GetSellable();
 	}
 	
 	public void InTT() {
@@ -20,6 +21,10 @@ public class DienMay extends HangHoa{
 		System.out.println("VAT: "+VAT+"%");
 		System.out.println("Thời gian bảo hành: "+timeBaoHanh);
 		System.out.println("Công xuất: "+congXuat);
+		if (status)
+			System.out.println("Đánh giá: bán được");
+		else
+			System.out.println("Đánh giá: Không bán được nhiều");
 	}
 	
 	//Hàng điện máy, nếu số lượng tồn kho <3 thì được đánh giá là bán được.
@@ -38,4 +43,5 @@ public class DienMay extends HangHoa{
 		timenow = timenow.plusMonths(timeBaoHanh);
 		return timenow;
 	}
+	
 }

@@ -1,9 +1,6 @@
 package main;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 import drivers.DanhSach;
@@ -15,8 +12,6 @@ public class Main {
 	static DanhSach list = new DanhSach();
 	
 	public static void main(String[] args) {
-		
-		
 		String[] listTenDM = {"Máy xay sinh tố","Máy cạo râu","Máy ép hoa quả","Máy bơm nước","Quạt máy"};
 		String[] listTenNhaSXDM = {"Điện máy xanh", "Co.op Mart", "Điện máy Chợ Lớn", "Điện máy Nguyễn Kim"};
 		
@@ -25,6 +20,8 @@ public class Main {
 		
 		String[] listTenSS = {"Chậu sứ", "Chén sứ", "Tô sứ", "Muỗng sứ", "Đĩa sứ"};
 		String[] listTenNhaSXSS = {"Co.op Mart", "E-Mart", "Sành Sứ Đông Nam", "Cửa hành sành sứ"};
+		
+		
 		
 		for (int i = 0; i < 5; i++) {
 			String year = "";
@@ -35,7 +32,7 @@ public class Main {
 			
 			list.AddItemDM(listTenDM[rdInt.nextInt(listTenDM.length)], listTenNhaSXDM[rdInt.nextInt(listTenNhaSXDM.length)], rdInt.nextInt(35)+1, rdInt.nextInt(100)+rdInt.nextInt(100)+50, rdInt.nextInt(5));
 			
-			year = Integer.toString(rdInt.nextInt(20)+2010);
+			year = Integer.toString(rdInt.nextInt(3)+2019);
 			monthInt = rdInt.nextInt(11)+1;
 			month = Integer.toString(monthInt);
 			if (month.length() == 1)
@@ -50,13 +47,13 @@ public class Main {
 		 	String value = year+"-"+month+"-"+day;
 			LocalDate timeSanXuat = LocalDate.parse(value);
 			
-			list.AddItemSS(listTenSS[rdInt.nextInt(listTenSS.length)], rdInt.nextInt(5), timeSanXuat, listTenNhaSXSS[rdInt.nextInt(listTenNhaSXSS.length)]);
+			list.AddItemSS(listTenSS[rdInt.nextInt(listTenSS.length)], rdInt.nextInt(100), timeSanXuat, listTenNhaSXSS[rdInt.nextInt(listTenNhaSXSS.length)]);
 			
 //			public Date timeSanXuat;
 			LocalDate timeHetHan;
 //			public String nameNhaSX;
 			
-			year = Integer.toString(rdInt.nextInt(20)+2010);
+			year = Integer.toString(rdInt.nextInt(10)+2010);
 			monthInt = rdInt.nextInt(11)+1;
 			month = Integer.toString(monthInt);
 			if (month.length() == 1)
@@ -194,13 +191,13 @@ public class Main {
 		
 		switch (luachon) {
 		case 1:
-			
+			list.ChangeItemInfoDM(id);
 			break;
 		case 2:
-			
+			list.ChangeItemInfoSS(id);
 			break;
 		case 3:
-	
+			list.ChangeItemInfoTP(id);
 			break;
 
 		default:
