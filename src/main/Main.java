@@ -1,23 +1,18 @@
 package main;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
-
-import Properties.DienMay;
-import Properties.SanhSu;
-import Properties.ThucPham;
+import drivers.DanhSach;
 
 public class Main {
-	
-	static List<DienMay> listDM = new ArrayList<DienMay>();
-	static List<SanhSu> listSS = new ArrayList<SanhSu>();
-	static List<ThucPham> listTP = new ArrayList<ThucPham>();
-	
-	static Random rd = new Random();
+	static Random rdLong = new Random();
+	static Random rdInt = new Random();
 	static Scanner input = new Scanner(System.in);
+	static DanhSach list = new DanhSach();
 	
 	public static void main(String[] args) {
 		
@@ -31,43 +26,53 @@ public class Main {
 		String[] listTenSS = {"Chậu sứ", "Chén sứ", "Tô sứ", "Muỗng sứ", "Đĩa sứ"};
 		String[] listTenNhaSXSS = {"Co.op Mart", "E-Mart", "Sành Sứ Đông Nam", "Cửa hành sành sứ"};
 		
-//		LocalDate date = LocalDate.parse("2020-05-03");
-//		date = date.plusMonths(36);
-//		System.out.println(date);
-		LocalDate date;
-		for (int i = 0; i < 10; i++) {
-			int year = rd.nextInt();
-			int month = rd.nextInt();
-			int day = rd.nextInt();
-			if (month == 2 && day > 28) 
-				day -= rd.nextInt(26)+1;
-			date = LocalDate.parse(Integer.toString(year)+"-"+Integer.toString(month)+"-"+Integer.toString(day));
+		for (int i = 0; i < 5; i++) {
+			String year = "";
+			String month = "";
+			String day = "";
+			int dayInt;
+			int monthInt;
 			
-			long id = rd.nextLong();
-			for (int j = 0; j < listDM.size(); j++) {
-				if (id == listDM.get(j).getId()) {
-					id = rd.nextLong();
-					j = -1;
-				}
-			}
+			list.AddItemDM(listTenDM[rdInt.nextInt(listTenDM.length)], listTenNhaSXDM[rdInt.nextInt(listTenNhaSXDM.length)], rdInt.nextInt(35)+1, rdInt.nextInt(100)+rdInt.nextInt(100)+50, rdInt.nextInt(5));
 			
+			year = Integer.toString(rdInt.nextInt(20)+2010);
+			monthInt = rdInt.nextInt(11)+1;
+			month = Integer.toString(monthInt);
+			if (month.length() == 1)
+				month = "0"+month;
 			
+			dayInt = rdInt.nextInt(30)+1;
+		 	if (monthInt == 2 && dayInt > 28) 
+		 		dayInt = dayInt - rdInt.nextInt(5)+2;
+		 	day = Integer.toString(dayInt);
+		 	if (day.length() == 1)
+		 		day = "0"+day;
+		 	String value = year+"-"+month+"-"+day;
+			LocalDate timeSanXuat = LocalDate.parse(value);
 			
-			year = rd.nextInt();
-			month = rd.nextInt();
-			day = rd.nextInt();
-			if (month == 2 && day > 28) 
-				day -= rd.nextInt(26)+1;
-			date = LocalDate.parse(Integer.toString(year)+"-"+Integer.toString(month)+"-"+Integer.toString(day));
+			list.AddItemSS(listTenSS[rdInt.nextInt(listTenSS.length)], rdInt.nextInt(5), timeSanXuat, listTenNhaSXSS[rdInt.nextInt(listTenNhaSXSS.length)]);
 			
+//			public Date timeSanXuat;
+			LocalDate timeHetHan;
+//			public String nameNhaSX;
 			
+			year = Integer.toString(rdInt.nextInt(20)+2010);
+			monthInt = rdInt.nextInt(11)+1;
+			month = Integer.toString(monthInt);
+			if (month.length() == 1)
+				month = "0"+month;
 			
-			year = rd.nextInt();
-			month = rd.nextInt();
-			day = rd.nextInt();
-			if (month == 2 && day > 28) 
-				day -= rd.nextInt(26)+1;
-			date = LocalDate.parse(Integer.toString(year)+"-"+Integer.toString(month)+"-"+Integer.toString(day));
+			dayInt = rdInt.nextInt(30)+1;
+		 	if (monthInt == 2 && dayInt > 28) 
+		 		dayInt = dayInt - rdInt.nextInt(5)+2;
+		 	day = Integer.toString(dayInt);
+		 	if (day.length() == 1)
+		 		day = "0"+day;
+		 	value = year+"-"+month+"-"+day;
+			timeSanXuat = LocalDate.parse(value);
+		 	timeHetHan = timeSanXuat.plusDays(rdInt.nextInt(3)+1);
+			
+			list.AddItemTP(listTenTP[rdInt.nextInt(listTenTP.length)], rdInt.nextInt(5), listTenNhaSXTP[rdInt.nextInt(listTenNhaSXTP.length)], timeSanXuat, timeHetHan);
 		}
 		
 		
@@ -77,7 +82,7 @@ public class Main {
 			System.out.println("1: Thêm hàng hóa");
 			System.out.println("2: Xóa hàng");
 			System.out.println("3: Sửa thông tin hàng");
-			System.out.println("4: Tính trung bình thành tiền các hóa đơn thuê phòng trong tháng 9/2013");
+			System.out.println("4: In danh sách kho hàng");
 			
 			int luachon = input.nextInt();
 			
@@ -89,7 +94,10 @@ public class Main {
 				XoaHang(); break;
 				
 			case 3:
-				XuaTTHang(); break;
+				SuaTTHang(); break;
+				
+			case 4:
+				InTT(); break;
 			default:
 				break;
 			}
@@ -103,34 +111,101 @@ public class Main {
 	
 	static void ThemHang() {
 		System.out.print("Chọn loại hàng muốn thêm	1: Điện máy	2: Sành sứ	3: Thực phẩm: "); int luachon = input.nextInt();
-		long id = rd.nextLong();
+		input.nextLine();
 		if (luachon == 1) {
-			for (int i = 0; i < listDM.size(); i++) {
-				if (id == listDM.get(i).getId()) {
-					id = rd.nextLong();
-					i = -1;
-				}
-			}
-			
 			System.out.print("Tên hàng: "); String name = input.nextLine();
-			System.out.println("Nhà suản xuất: "); String nameNhaSX = input.nextLine();
-			System.out.println("Thời gian bảo hành (tháng): "); int timeBaoHanh = input.nextInt();
-			System.out.println("Công xuất máy: "); int congXuat = input.nextInt();
+			System.out.print("Nhà suản xuất: "); String nameNhaSX = input.nextLine();
+			System.out.print("Thời gian bảo hành (tháng): "); int timeBaoHanh = input.nextInt();
+			System.out.print("Công xuất máy: "); int congXuat = input.nextInt();
 			System.out.print("Số lượng: "); int itemCount = input.nextInt();
-			DienMay a = new DienMay(id, name, itemCount, timeBaoHanh, congXuat, nameNhaSX);
-			listDM.add(a);
+			list.AddItemDM(name, nameNhaSX, timeBaoHanh, congXuat, itemCount);
 		}else if (luachon == 2) {
-			
+			System.out.print("Tên hàng: "); String name = input.nextLine();
+			System.out.print("Nhà suản xuất: "); String nameNhaSX = input.nextLine();
+			System.out.print("Ngày sản xuất (format: YYYY-MM-YY)"); LocalDate daySS = LocalDate.parse(input.nextLine());
+			System.out.print("Số lượng: "); int itemCount = input.nextInt();
+			list.AddItemSS(name, itemCount, daySS, nameNhaSX);
 		}else if (luachon == 3) {
-			
+			System.out.print("Tên hàng: "); String name = input.nextLine();
+			System.out.print("Nhà suản xuất: "); String nameNhaSX = input.nextLine();
+			System.out.print("Ngày sản xuất (format: YYYY-MM-YY)"); LocalDate daySS = LocalDate.parse(input.nextLine());
+			System.out.print("Ngày hết hạn (ngày)"); int dayHH = input.nextInt();
+			System.out.print("Số lượng: "); int itemCount = input.nextInt();
+			list.AddItemTP(name, itemCount, nameNhaSX, daySS, daySS.plusDays(dayHH));
 		}
 	}
 	
 	static void XoaHang() {
-		listDM = null;
+		System.out.print("Chọn loại hàng muốn xóa	1: Điện máy	2: Sành sứ	3: Thực phẩm: "); int luachon = input.nextInt();
+		if (luachon != 1 || luachon != 2 || luachon != 3) {
+			System.out.println("Chọn sai vui lòng chọn lại\n\n");
+			return;
+		}
+			
+		System.out.print("Chọn cách xóa	1: id	2: Tên	"); int deleteWay = input.nextInt();
+		if (luachon == 1) {
+			if (deleteWay == 1) {
+				System.out.print("Nhập id bạn muốn xóa: "); long id = input.nextLong();
+				list.DeleteDM(id);
+			}else {
+				System.out.print("Nhập tên hàng muốn xóa: "); String name = input.nextLine();
+				list.DeleteDM(name);
+			}
+		}else if (luachon == 2) {
+			if (deleteWay == 1) {
+				System.out.print("Nhập id bạn muốn xóa: "); long id = input.nextLong();
+				list.DeleteSS(id);
+			}else {
+				System.out.print("Nhập tên hàng muốn xóa: "); String name = input.nextLine();
+				list.DeleteSS(name);
+			}
+		}else if (luachon == 3) {
+			if (deleteWay == 1) {
+				System.out.print("Nhập id bạn muốn xóa: "); long id = input.nextLong();
+				list.DeleteTP(id);
+			}else {
+				System.out.print("Nhập tên hàng muốn xóa: "); String name = input.nextLine();
+				list.DeleteTP(name);
+			}
+		}
 	}
 	
-	static void XuaTTHang() {
+	static void InTT() {
+		System.out.print("Chọn loại hàng in	1: Điện máy	2: Sành sứ	3: Thực phẩm	4: Cả kho"); int luachon = input.nextInt();
+		if (luachon == 1)
+			list.InDSDM();
+		else if (luachon == 2)
+			list.InDSSS();
+		else if (luachon == 3)
+			list.InDSTP();
+		else if (luachon == 4)
+			list.InTT();
+		else
+			System.out.println("Chọn sai vui lòng chọn lại\n\n");
+	}
+	
+	static void SuaTTHang() {
+		System.out.print("Chọn loại hàng muốn sửa	1: Điện máy	2: Sành sứ	3: Thực phẩm: "); int luachon = input.nextInt();
+		if (luachon > 3) {
+			System.out.println("Chọn sai vui lòng chọn lại\n\n");
+			return;
+		}
+		System.out.print("Nhập id muốn xóa"); int id = input.nextInt();
 		
+		switch (luachon) {
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+		case 3:
+	
+			break;
+
+		default:
+			System.out.println("Chọn sai vui lòng chọn lại\n\n");
+			break;
+		}
 	}
 }

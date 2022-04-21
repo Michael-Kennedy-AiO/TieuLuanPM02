@@ -35,7 +35,7 @@ public class DienMay extends HangHoa{
 	
 	private LocalDate CalTimeBaoHanh(int timeBaoHanh) {
 		LocalDate timenow = LocalDate.now();
-		timenow.plusMonths(timeBaoHanh);
+		timenow = timenow.plusMonths(timeBaoHanh);
 		return timenow;
 	}
 }

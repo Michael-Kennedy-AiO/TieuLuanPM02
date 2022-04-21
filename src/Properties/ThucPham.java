@@ -11,8 +11,10 @@ public class ThucPham extends HangHoa{
 	private float VAT = 5;
 	
 	
-	public ThucPham(long _id, String _name, int _itemCount, String nameNhaSX) {
+	public ThucPham(long _id, String _name, int _itemCount, String nameNhaSX, Date _timeSanXuat, Date _timeHetHan) {
 		super(_id, _name, _itemCount, nameNhaSX);
+		timeSanXuat = _timeSanXuat;
+		timeHetHan = _timeHetHan;
 	}
 	
 	public Boolean GetSellable() {
